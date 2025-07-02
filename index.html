@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Giampiero Cavallo</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+
+
+  <style>
+    /* Reset */
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #0b1423;
+      color: #f0f0f0;
+      overflow-x: hidden;
+      /* Previene lo zoom involontario su input form in iOS */
+      -webkit-text-size-adjust: 100%;
+    }
+
+    /* LOADER PAGE */
+    #loader {
+      position: fixed;
+      inset: 0;
+      background: #07101b;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+    #loader.hide {
+      opacity: 0;
+      visibility: hidden;
+    }
+    #loader svg.lamp {
+      width: 120px;
+      height: 120px;
+      fill: #203d77;
+      filter: drop-shadow(0 0 12px #ffeb3b);
+      animation: lampGlow 2s ease-in-out infinite alternate;
+      cursor: default;
+    }
+    #loader svg.lamp.on {
+      fill: #ffeb3b;
+      filter: drop-shadow(0 0 25px #ffeb3b);
+    }
+    @keyframes lampGlow {
+      0% { fill: #203d77; filter: drop-shadow(0 0 12px #203d77); }
+      100% { fill: #ffeb3b; filter: drop-shadow(0 0 25px #ffeb3b); }
+    }
+    #loader h1 {
+      margin-top: 20px;
+      font-weight: 600;
+      font-size: 2.4rem;
+      color: #ffeb3b;
+      letter-spacing: 3px;
+      user-select: none;
+      animation: textPulse 2s ease-in-out infinite;
+    }
+    @keyframes textPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.1); }
+    }
+
+    /* HEADER */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      background: #12213a;
+      height: 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 32px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      z-index: 10;
+    }
+    header .logo {
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: #ffeb3b;
+      user-select: none;
+    }
+
+    /* HEADER - Logo Pulsante */
+    header .logo.pulsing-text {
+      animation: pulseLogo 1.5s infinite ease-in-out;
+    }
+
+    @keyframes pulseLogo {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+        text-shadow: 0 0 5px #ffeb3b;
+      }
+      50% {
+        transform: scale(1.05);
+        opacity: 0.9;
+        text-shadow: 0 0 15px #ffeb3b;
+      }
+    }
+
+    nav a {
+      color: #a8b5d1;
+      margin-left: 24px;
+      font-weight: 600;
+      text-decoration: none;
+      position: relative;
+      transition: color 0.3s ease;
+    }
+    nav a:hover, nav a.active {
+      color: #ffeb3b;
+    }
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      border-radius: 2px;
+      opacity: 0;
+      transform: scaleX(0);
+      transition: all 0.3s ease;
+    }
+    nav a.active::after,
+    nav a:hover::after {
+      opacity: 1;
+      transform: scaleX(1);
+    }
+
+    /* MAIN CONTENT */
+    main {
+      padding-top: 80px;
+      max-width: 960px;
+      margin: 0 auto 80px;
+      padding-left: 24px; /* Aggiunto padding laterale per mobile */
+      padding-right: 24px; /* Aggiunto padding laterale per mobile */
+    }
+
+    /* SEZIONE HOME INTRO con immagine di sfondo */
+    section#home {
+      min-height: 70vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center; /* Centra orizzontalmente il contenuto */
+      text-align: center;
+      padding: 0;
+      position: relative; /* Necessario per posizionare gli elementi */
+      color: #f0f0f0;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.7); /* Ombra per migliorare la leggibilità del testo */
+    }
+
+    /* Stile per il logo circolare con lampadina SVG */
+    .profile-image-container {
+      width: 200px; /* Dimensione del cerchio */
+      height: 200px;
+      border-radius: 50%; /* Rende l'elemento un cerchio */
+      overflow: hidden; /* Nasconde ciò che esce dal cerchio */
+      margin-bottom: 25px; /* Spazio sotto l'immagine */
+      border: 5px solid #ffeb3b; /* Bordo giallo */
+      box-shadow: 0 0 20px rgba(255, 235, 59, 0.6); /* Ombra luminosa */
+      display: flex; /* Centra l'immagine al suo interno */
+      justify-content: center;
+      align-items: center;
+      background-color: #20304f; /* Colore di fallback o se l'immagine non carica */
+    }
+
+    /* Stile per l'SVG della lampadina nel container */
+    .profile-image-container svg.lamp-profile {
+      width: 80%; /* Occupa l'80% del contenitore */
+      height: 80%;
+      fill: #ffeb3b; /* Colore giallo */
+      filter: drop-shadow(0 0 15px #ffeb3b); /* Ombra luminosa */
+      animation: lampGlowProfile 2s ease-in-out infinite alternate; /* Animazione di pulsazione */
+    }
+
+    @keyframes lampGlowProfile {
+      0% { fill: #ffeb3b; filter: drop-shadow(0 0 15px #ffeb3b); transform: scale(1); }
+      100% { fill: #ffd700; filter: drop-shadow(0 0 25px #ffd700); transform: scale(1.05); }
+    }
+
+
+    section#home h2 {
+      font-size: 3.5rem; /* Aumentato leggermente per risaltare */
+      font-weight: 700;
+      color: #ffeb3b;
+      margin-bottom: 12px;
+    }
+    section#home p {
+      font-size: 1.3rem;
+      color: #c8d0e7;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* SEZIONE CHI SONO */
+    section#chi-sono {
+      background: #12213a;
+      padding: 40px 24px;
+      border-radius: 12px;
+      margin: 60px 0;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 24px;
+    }
+    section#chi-sono svg {
+      flex-shrink: 0;
+      width: 140px;
+      height: 140px;
+      fill: #ffeb3b;
+      filter: drop-shadow(0 0 5px #ffeb3b88);
+      animation: glowPulse 3s infinite ease-in-out;
+    }
+    @keyframes glowPulse {
+      0%, 100% { filter: drop-shadow(0 0 5px #ffeb3b88); }
+      50% { filter: drop-shadow(0 0 20px #ffeb3b); }
+    }
+    section#chi-sono div {
+      flex: 1 1 300px;
+      color: #d1d7e7;
+      font-size: 1.1rem;
+      line-height: 1.5;
+    }
+
+    /* SLIDER COMPETENZE AGGIUNTIVE */
+    #skills-slider {
+      padding: 40px 0;
+      overflow: hidden; /* Nasconde le parti che escono dallo slider */
+      margin-top: 40px;
+      margin-bottom: 40px;
+      background: #12213a;
+      border-radius: 12px;
+      box-shadow: 0 0 30px rgb(255 235 59 / 0.1);
+      position: relative; /* Per posizionare le frecce */
+    }
+
+    .slider-container {
+      display: flex; /* Utilizza flexbox per le card */
+      white-space: nowrap; /* Mantiene le card su una singola riga */
+      transition: transform 0.5s ease-in-out; /* Transizione per lo scorrimento manuale */
+    }
+
+    .slider-card {
+      flex: 0 0 auto; /* Le card non si restringono, la loro dimensione è fissa */
+      display: inline-flex; /* Allinea le card in linea */
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #20304f;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 0 20px rgb(255 235 59 / 0.1);
+      transition: box-shadow 0.4s ease, transform 0.3s ease;
+      cursor: default;
+      margin: 0 12px; /* Spazio tra le card */
+      min-width: 200px; /* Larghezza minima delle card */
+      vertical-align: top; /* Allineamento per evitare problemi di layout */
+    }
+
+    .slider-card:hover {
+      box-shadow: 0 0 40px #ffeb3b;
+      transform: translateY(-10px);
+    }
+
+    .slider-card svg {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 16px;
+      fill: none;
+      stroke: #ffeb3b;
+      stroke-width: 2.5;
+    }
+    .slider-card h3 {
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #ffeb3b;
+      text-align: center;
+    }
+    .slider-card p {
+      color: #d1d7e7;
+      font-size: 1rem;
+      line-height: 1.4;
+      text-align: center;
+    }
+
+    .slider-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(255, 235, 59, 0.8);
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        min-width: 44px; /* Aumenta l'area cliccabile per touch */
+        min-height: 44px; /* Aumenta l'area cliccabile per touch */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 5;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+        /* Per evitare highlight blu su click */
+        -webkit-tap-highlight-color: transparent;
+    }
+    .slider-arrow:hover {
+        background: #ffeb3b;
+        transform: translateY(-50%) scale(1.1);
+    }
+    .slider-arrow svg {
+        width: 24px;
+        height: 24px;
+        stroke: #12213a;
+        stroke-width: 3;
+        fill: none;
+    }
+    .slider-arrow.left {
+        left: 10px;
+    }
+    .slider-arrow.right {
+        right: 10px;
+    }
+
+    /* SEZIONE COMPETENZE PRINCIPALI */
+    section#competenze {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+      gap: 24px;
+      margin-bottom: 80px;
+    }
+    /* Stili per le card esistenti */
+    .card {
+      background: #20304f;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 0 20px rgb(255 235 59 / 0.1);
+      transition: box-shadow 0.4s ease, transform 0.3s ease;
+      cursor: default;
+    }
+    .card:hover {
+      box-shadow: 0 0 40px #ffeb3b;
+      transform: translateY(-10px);
+    }
+    .card svg {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 16px;
+      fill: none;
+      stroke: #ffeb3b;
+      stroke-width: 2.5;
+    }
+    .card h3 {
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #ffeb3b;
+    }
+    .card p {
+      color: #d1d7e7;
+      font-size: 1rem;
+      line-height: 1.4;
+    }
+
+    /* SEZIONE SCARICA CV */
+    section#download-cv {
+      text-align: center;
+      background: #12213a;
+      border-radius: 12px;
+      padding: 70px 24px;
+      box-shadow: 0 0 30px rgb(255 235 59 / 0.1);
+      margin-bottom: 40px;
+    }
+    section#download-cv p {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      color: #d1d7e7;
+    }
+    section#download-cv a {
+      display: inline-flex;
+      align-items: center;
+      background: #ffeb3b;
+      color: #12213a;
+      font-weight: 700;
+      font-size: 1.1rem;
+      padding: 14px 30px;
+      border-radius: 40px;
+      text-decoration: none;
+      box-shadow: 0 6px 8px rgb(255 235 59 / 0.5);
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      min-width: 150px; /* Assicura un'area cliccabile sufficiente */
+      min-height: 44px; /* Standard per il touch */
+      justify-content: center; /* Centra il contenuto all'interno */
+      /* Per evitare highlight blu su click */
+      -webkit-tap-highlight-color: transparent;
+    }
+    section#download-cv a:hover {
+      background: #e6d700;
+      transform: scale(1.05);
+    }
+    section#download-cv a svg {
+      margin-left: 12px;
+      stroke: #12213a;
+      stroke-width: 3;
+      width: 24px;
+      height: 24px;
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #64748b;
+      font-size: 0.9rem;
+    }
+
+    /* Scroll smooth */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* ------------------------------------- */
+    /* NEW MODAL STYLES FOR THE "X" BUTTON */
+    /* ------------------------------------- */
+    #loading-modal {
+      display: none; /* Inizialmente nascosto */
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.7); /* Sfondo semi-trasparente */
+      align-items: center;
+      justify-content: center;
+    }
+
+    #loading-modal.show-modal {
+      display: flex; /* Mostra il modale quando ha questa classe */
+    }
+
+    .modal-content {
+      background-color: #0b1423; /* Colore di sfondo del contenuto del pop-up */
+      margin: auto; /* Per centrare, ma flexbox fa già il grosso */
+      padding: 30px;
+      border: 2px solid #ffeb3b; /* Bordo luminoso */
+      border-radius: 12px;
+      width: 80%; /* Larghezza del pop-up */
+      max-width: 600px; /* Larghezza massima */
+      box-shadow: 0 0 30px rgba(255, 235, 59, 0.4); /* Ombra luminosa */
+      position: relative; /* Importante per posizionare la 'X' */
+      animation: modalPopIn 0.3s ease-out; /* Animazione di entrata */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    /* Animazione per il pop-in del modale */
+    @keyframes modalPopIn {
+      from {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    /* Stile per il pulsante di chiusura "X" */
+    .close-modal-button {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      color: #ffeb3b; /* Colore della 'X' */
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 5px 10px;
+      transition: color 0.3s ease, transform 0.3s ease;
+      /* Per evitare highlight blu su click */
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .close-modal-button:hover,
+    .close-modal-button:focus {
+      color: #fff; /* Cambia colore al passaggio del mouse */
+      transform: rotate(90deg); /* Piccola rotazione per effetto */
+      outline: none; /* Rimuove l'outline al focus */
+    }
+
+    /* Stili esistenti per il modale (assicurati che siano presenti e non in conflitto) */
+    .electric-meter-display {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      border: 2px solid #203d77;
+      padding: 15px;
+      border-radius: 8px;
+      background-color: #07101b;
+      font-family: 'VT323', monospace;
+      font-size: 2.2rem;
+      color: #00ff00; /* Verde neon */
+      box-shadow: inset 0 0 10px rgba(0, 255, 0, 0.5);
+      text-align: right;
+      min-height: 120px;
+      justify-content: center;
+      gap: 8px;
+      position: relative; /* Per il glitch effect */
+    }
+
+    .meter-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
+    .meter-label {
+      font-size: 1.2rem;
+      color: #a8b5d1;
+      min-width: 120px;
+      text-align: left;
+    }
+
+    .meter-value {
+      color: #00ff00;
+      flex-grow: 1;
+      text-align: right;
+    }
+
+    .status-indicator {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    .status-indicator.off {
+      background-color: red;
+      box-shadow: 0 0 8px rgba(255, 0, 0, 0.7);
+    }
+
+    .status-indicator.on {
+      background-color: green;
+      box-shadow: 0 0 8px rgba(0, 255, 0, 0.7);
+    }
+
+    .terminal-text {
+      width: 100%;
+      background-color: #000;
+      border: 1px solid #00ff00;
+      padding: 10px;
+      min-height: 80px;
+      font-family: 'VT323', monospace;
+      color: #00ff00;
+      font-size: 1.1rem;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      text-align: left;
+      box-shadow: inset 0 0 8px rgba(0, 255, 0, 0.4);
+    }
+
+    .cursor {
+      animation: blink-caret 0.75s step-end infinite;
+      display: inline-block;
+      width: 8px;
+      height: 1.1em;
+      background-color: #00ff00;
+      vertical-align: bottom;
+    }
+
+    @keyframes blink-caret {
+      from, to { background-color: transparent; }
+      50% { background-color: #00ff00; }
+    }
+
+    /* Stili per l'interruttore BTicino */
+    .bticino-breaker {
+      width: 120px;
+      height: 180px;
+      filter: drop-shadow(0 0 10px rgba(255, 235, 59, 0.3));
+    }
+
+    .breaker-body {
+      fill: #12213a;
+      stroke: #a8b5d1;
+      stroke-width: 3;
+      rx: 8px;
+      ry: 8px;
+    }
+
+    .breaker-front-panel {
+      fill: #20304f;
+      stroke: #64748b;
+      stroke-width: 2;
+      rx: 5px;
+      ry: 5px;
+    }
+
+    .breaker-lever {
+      fill: #dc3545; /* Rosso per lo stato OFF */
+      stroke: #c82333;
+      stroke-width: 2;
+      rx: 5px;
+      ry: 5px;
+      transition: transform 0.2s ease-in-out, fill 0.2s ease-in-out;
+      transform-origin: center center;
+      cursor: pointer;
+    }
+
+    /* NUOVA REGOLA: colore verde quando la leva è "ON" */
+    .breaker-lever.on {
+      fill: #28a745; /* Verde acceso */
+      stroke: #218838; /* Verde più scuro per il bordo */
+      transform: translateY(-20px); /* Sposta la leva in alto */
+    }
+
+    .breaker-text {
+      font-family: 'Orbitron', sans-serif; /* Font futuristico */
+      font-size: 24px; /* Dimensione del testo */
+      fill: #fff; /* Colore del testo bianco */
+      text-anchor: middle; /* Centra il testo orizzontalmente */
+      dominant-baseline: central; /* Centra il testo verticalmente */
+      user-select: none; /* Impedisce la selezione del testo */
+      pointer-events: none; /* Fa in modo che il testo non interferisca con il click sulla leva */
+      transition: transform 0.2s ease-in-out; /* Aggiungi transizione anche al testo */
+    }
+
+    /* NUOVA REGOLA: sposta il testo quando la leva è "ON" */
+    .breaker-text.on {
+      transform: translateY(-20px); /* Sposta il testo in alto con la leva */
+    }
+
+    .breaker-indicator-window {
+      fill: #07101b;
+      stroke: #64748b;
+      stroke-width: 1;
+      rx: 3px;
+      ry: 3px;
+    }
+
+    .breaker-icon {
+      stroke: #ffeb3b;
+      stroke-width: 2;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* Stili per il messaggio sotto l'interruttore */
+    .breaker-message {
+      color: #ffeb3b;
+      font-size: 1rem;
+      font-weight: 600;
+      margin-top: 15px;
+      text-align: center;
+      line-height: 1.4;
+      text-shadow: 0 0 5px rgba(255, 235, 59, 0.5);
+    }
+    /* Animazione leggera per il messaggio */
+    .breaker-message.pulsate {
+        animation: pulsateMessage 1.5s infinite ease-in-out;
+    }
+
+    @keyframes pulsateMessage {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.9; transform: scale(1.02); }
+    }
+
+
+    /* Responsive */
+    /* Media query per dispositivi più piccoli (es. tablet in portrait, smartphone grandi) */
+    @media (max-width: 768px) {
+      /* Header */
+      header {
+        height: auto;
+        flex-direction: column;
+        padding: 15px;
+        gap: 10px; /* Spazio tra logo e nav */
+      }
+      header .logo {
+        font-size: 1.3rem;
+      }
+      nav {
+        margin-top: 5px; /* Riduci margine superiore della nav */
+        text-align: center;
+        width: 100%; /* Occupa tutta la larghezza */
+        display: flex;
+        justify-content: center; /* Centra i link */
+        flex-wrap: wrap; /* Permette ai link di andare a capo */
+      }
+      nav a {
+        margin: 0 6px; /* Riduci spazio tra i link */
+        font-size: 0.85rem; /* Riduci dimensione font */
+        padding: 5px 0; /* Aggiungi un po' di padding verticale per cliccabilità */
+      }
+      nav a::after {
+        bottom: -3px; /* Aggiusta la posizione della sottolineatura */
+      }
+
+      /* Main Content */
+      main {
+        padding-top: 120px; /* Aumenta padding per il nuovo header più grande */
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+
+      /* Home Section */
+      .profile-image-container {
+        width: 160px; /* Adatta la dimensione del logo */
+        height: 160px;
+      }
+      .profile-image-container svg.lamp-profile {
+        width: 70%; /* Adatta la dimensione SVG per schermi più piccoli */
+        height: 70%;
+      }
+      section#home h2 {
+        font-size: 2.8rem; /* Riduci dimensione titolo */
+      }
+      section#home p {
+        font-size: 1.1rem; /* Riduci dimensione testo */
+      }
+
+      /* Chi Sono Section */
+      section#chi-sono {
+        flex-direction: column;
+        text-align: center;
+        padding: 30px 16px;
+      }
+      section#chi-sono svg {
+        width: 100px;
+        height: 100px;
+      }
+      section#chi-sono div {
+        font-size: 1rem;
+      }
+
+      /* Slider Skills */
+      #skills-slider {
+        padding: 30px 0;
+      }
+      .slider-card {
+        min-width: 160px; /* Larghezza minima ridotta */
+        padding: 18px;
+        margin: 0 8px; /* Spazio tra le card ridotto */
+      }
+      .slider-card h3 {
+        font-size: 0.95rem;
+      }
+      .slider-card p {
+        font-size: 0.8rem;
+      }
+      .slider-card svg {
+        width: 40px;
+        height: 40px;
+      }
+      .slider-arrow {
+        width: 36px;
+        height: 36px;
+        min-width: 40px; /* Maintain touch target size */
+        min-height: 40px; /* Maintain touch target size */
+      }
+      .slider-arrow svg {
+        width: 20px;
+        height: 20px;
+      }
+      .slider-arrow.left {
+        left: 5px;
+      }
+      .slider-arrow.right {
+        right: 5px;
+      }
+
+      /* Competenze Principali */
+      section#competenze {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Riduci min-width */
+        gap: 16px; /* Riduci gap */
+      }
+      .card {
+        padding: 20px;
+      }
+      .card svg {
+        width: 40px;
+        height: 40px;
+      }
+      .card h3 {
+        font-size: 1rem;
+      }
+      .card p {
+        font-size: 0.9rem;
+      }
+
+      /* Download CV Section */
+      section#download-cv {
+        padding: 25px 16px;
+      }
+      section#download-cv p {
+        font-size: 1.1rem;
+      }
+      section#download-cv a {
+        font-size: 1rem;
+        padding: 12px 25px;
+      }
+
+      /* Modal Specifics */
+      .modal-content {
+        width: 95%; /* Leggermente più largo per schermi molto piccoli */
+        padding: 20px;
+      }
+      .electric-meter-display {
+        font-size: 1.8rem; /* Riduci dimensione font del display */
+        min-height: 100px;
+      }
+      .meter-value {
+        font-size: 1.8rem;
+      }
+      .meter-label {
+        font-size: 1rem;
+        min-width: 100px; /* Adatta la larghezza delle etichette */
+      }
+      .terminal-text {
+        font-size: 1rem;
+        min-height: 60px;
+      }
+      .bticino-breaker {
+        width: 100px; /* Riduci dimensione interruttore */
+        height: 150px;
+      }
+      .breaker-text {
+        font-size: 20px; /* Adatta dimensione testo ON/OFF */
+      }
+      .breaker-message {
+          font-size: 0.9rem;
+          margin-top: 10px;
+      }
+    }
+
+    /* Media query per schermi molto piccoli (es. iPhone SE, smartphone di vecchia generazione) */
+    @media (max-width: 480px) {
+      header .logo {
+        font-size: 1.2rem;
+      }
+      nav a {
+        margin: 0 4px;
+        font-size: 0.8rem;
+      }
+      main {
+        padding-top: 100px; /* Ancora un po' meno padding per header più compatto */
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+      .profile-image-container {
+        width: 120px;
+        height: 120px;
+      }
+      .profile-image-container svg.lamp-profile {
+        width: 60%; /* Adatta la dimensione SVG per schermi molto piccoli */
+        height: 60%;
+      }
+      section#home h2 {
+        font-size: 2.2rem;
+      }
+      section#home p {
+        font-size: 0.9rem;
+      }
+
+      .slider-card {
+        min-width: 140px; /* Ancora più piccole le card */
+        padding: 15px;
+      }
+      .slider-arrow {
+        width: 30px;
+        height: 30px;
+        min-width: 36px;
+        min-height: 36px;
+      }
+      .slider-arrow svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      section#competenze {
+        grid-template-columns: 1fr; /* Una colonna per schermi molto stretti */
+      }
+      .card {
+        padding: 18px;
+      }
+      .card h3 {
+        font-size: 0.95rem;
+      }
+      .card p {
+        font-size: 0.85rem;
+      }
+
+      section#download-cv p {
+        font-size: 1rem;
+      }
+      section#download-cv a {
+        font-size: 0.95rem;
+        padding: 10px 20px;
+      }
+
+      /* Modal specifics for very small screens */
+      .modal-content {
+        padding: 15px;
+      }
+      .electric-meter-display {
+        font-size: 1.5rem;
+        min-height: 90px;
+      }
+      .meter-value {
+        font-size: 1.5rem;
+      }
+      .meter-label {
+        font-size: 0.9rem;
+        min-width: 80px;
+      }
+      #terminal-text {
+        font-size: 0.9rem;
+        min-height: 50px;
+      }
+      .bticino-breaker {
+        width: 80px; /* Ancora più piccolo l'interruttore */
+        height: 120px;
+      }
+      .breaker-text {
+        font-size: 18px; /* Adatta dimensione testo ON/OFF */
+      }
+      .breaker-message {
+          font-size: 0.8rem;
+      }
+    }
+
+  </style>
+
+</head>
+<body>
+
+
+<div id="loader" aria-label="Pagina di caricamento">
+  <svg class="lamp" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <path d="M9 21h6v-1.5H9V21zm3-19C7.92 2 4 5.92 4 10c0 2.61 1.26 4.93 3.22 6.43L7 18c0 .55.45 1 1 1h8c.55 0 1-.45 1-1l-.22-1.57C18.74 14.93 20 12.61 20 10c0-4.08-3.92-8-8-8zm2.83 15H8.17l.31-2.22C6.71 12.17 6 11.13 6 10c0-3.31 3.13-6 6-6s6 2.69 6 6c0 1.13-.71 2.17-2.48 3.78l.31 2.22z"/>
+  </svg>
+  <h1>GIAMPIERO</h1>
+</div>
+
+<header>
+  <div class="logo pulsing-text" tabindex="0">Giampiero</div>
+  <nav aria-label="Navigazione principale">
+    <a href="#home" class="active" tabindex="1"onclick="scrollToCenter(event, 'home')">Home</a>
+    <a href="#chi-sono" tabindex="0" onclick="scrollToCenter(event, 'chi-sono'">Chi sono</a>
+    <a href="#competenze" tabindex="0" onclick="scrollToCenter(event, 'competenze')">Competenze</a>
+    <a href="#download-cv" tabindex="0" onclick="scrollToCenter(event, 'download-cv')">CV</a>
+
+  </nav>
+</header>
+
+<main>
+  <section id="home" tabindex="1" aria-label="Sezione introduttiva">
+    <div class="profile-image-container">
+      <svg class="lamp-profile" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M9 21h6v-1.5H9V21zm3-19C7.92 2 4 5.92 4 10c0 2.61 1.26 4.93 3.22 6.43L7 18c0 .55.45 1 1 1h8c.55 0 1-.45 1-1l-.22-1.57C18.74 14.93 20 12.61 20 10c0-4.08-3.92-8-8-8zm2.83 15H8.17l.31-2.22C6.71 12.17 6 11.13 6 10c0-3.31 3.13-6 6-6s6 2.69 6 6c0 1.13-.71 2.17-2.48 3.78l.31 2.22z"/>
+      </svg>
+    </div>
+    <p>Benvenuto nel mio sito!</p>
+    <h2>Ciao, sono Giampiero</h2>
+    <p>In questo spazio potrai esplorare i miei interessi personali, approfondire le mie competenze professionali e accedere al mio curriculum vitae.</p>
+  </section>
+
+  <section id="chi-sono" tabindex="0" aria-label="Sezione chi sono">
+    <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false" role="img">
+      <circle cx="32" cy="24" r="12" stroke="#ffeb3b" stroke-width="3" fill="none"/>
+      <path d="M16 52c0-9 32-9 32 0" stroke="#ffeb3b" stroke-width="3" fill="none" />
+      <path d="M20 54v6M44 54v6" stroke="#ffeb3b" stroke-width="3" stroke-linecap="round" />
+    </svg>
+    <div>
+      <p>Sono un Perito Elettrotecnico diplomato con votazione (94/100), con una solida preparazione tecnica e una forte passione per il settore elettrico. Durante il mio percorso formativo e professionale ho sviluppato competenze approfondite in progettazione, installazione e manutenzione di impianti elettrici industriali e civili, ponendo sempre attenzione a sicurezza, efficienza e innovazione. Il mio approccio è orientato alla precisione e al problem solving, con l’obiettivo di fornire soluzioni tecnologiche affidabili e all’avanguardia, capaci di rispondere efficacemente alle esigenze del cliente.</p>
+    </div>
+  </section>
+
+  <section id="skills-slider" aria-label="Slider di competenze aggiuntive" tabindex="0">
+    <button class="slider-arrow left" aria-label="Scorri a sinistra">
+      <svg viewBox="0 0 24 24">
+        <path d="M15 18l-6-6 6-6" />
+      </svg>
+    </button>
+    <div class="slider-container">
+      <article class="slider-card" tabindex="0" aria-label="Produzione Musicale">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M9 18V5l12-2v13M9 18a3 3 0 100-6 3 3 0 000 6zM21 16a3 3 0 100-6 3 3 0 000 6z" stroke="#ffeb3b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+        <h3>Produzione Musicale</h3>
+        <p>Creazione e arrangiamento di brani, mixaggio e mastering audio.</p>
+      </article>
+      <article class="slider-card" tabindex="0" aria-label="Video Editing">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M17 2v6h6M17 2L10 9M2 12V2h10l7 7v13H2z" stroke="#ffeb3b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+        <h3>Video Editing</h3>
+        <p>Montaggio, effetti speciali e post-produzione per video professionali.</p>
+      </article>
+      <article class="slider-card" tabindex="0" aria-label="Grafico Digitale">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke="#ffeb3b" stroke-width="2" fill="none"/>
+          <path d="M7 12l2 2 4-4M17 7l-2 2" stroke="#ffeb3b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+        <h3>Grafico Digitale</h3>
+        <p>Design di loghi, materiali pubblicitari e grafica web con software dedicati.</p>
+      </article>
+      <article class="slider-card" tabindex="0" aria-label="Informatica di Base da Autodidatta">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="2" y="3" width="20" height="14" rx="2" ry="2" stroke="#ffeb3b" stroke-width="2" fill="none"/>
+          <path d="M6 17v3M18 17v3M10 21h4" stroke="#ffeb3b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+        <h3>Informatica di Base</h3>
+        <p>Competenze autodidattiche in sistemi operativi, software e risoluzione problemi.</p>
+      </article>
+    </div>
+    <button class="slider-arrow right" aria-label="Scorri a destra">
+      <svg viewBox="0 0 24 24">
+        <path d="M9 18l6-6-6-6" />
+      </svg>
+    </button>
+    <a></a>
+  </section>
+
+  <section id="competenze" aria-label="Sezione competenze professionali" tabindex="0">
+    <article class="card" tabindex="0" aria-label="Impianti elettrici">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 2v20M5 7h14M5 17h14" stroke="#ffeb3b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+      <h3>Impianti Elettrici</h3>
+      <p>Progettazione e manutenzione impianti civili e industriali.</p>
+    </article>
+    <article class="card" tabindex="0" aria-label="Elettronica">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="10" stroke="#ffeb3b" stroke-width="2" fill="none" />
+        <path d="M12 6v6l4 2" stroke="#ffeb3b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      <h3>Elettronica</h3>
+      <p>Analisi e riparazione circuiti elettronici digitali e analogici.</p>
+    </article>
+    <article class="card" tabindex="0" aria-label="Automazione">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="4" y="6" width="16" height="12" rx="2" ry="2" stroke="#ffeb3b" stroke-width="2" fill="none"/>
+        <path d="M8 6v12M16 6v12" stroke="#ffeb3b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      <h3>Automazione</h3>
+      <p>Sviluppo e gestione di sistemi PLC e controllo industriale finalizzati all’ottimizzazione dei processi produttivi.</p>
+    </article>
+    <article class="card" tabindex="0" aria-label="Progettazione CAD">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M5 19l14-14M7 17h8M7 7h8" stroke="#ffeb3b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+      <h3>Progettazione CAD</h3>
+      <p>Disegno tecnico e schemi elettrici con software CAD professionali.</p>
+    </article>
+    <article class="card" tabindex="0" aria-label="Sistemi di Sicurezza">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 2L4 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-8-3z" stroke="#ffeb3b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <path d="M12 16a4 4 0 100-8 4 4 0 000 8z" stroke="#ffeb3b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+      <h3>Sistemi di Sicurezza</h3>
+      <p>Installazione e manutenzione impianti di allarme e videosorveglianza.</p>
+    </article>
+    <article class="card" tabindex="0" aria-label="Energie Rinnovabili">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="2" y="3" width="20" height="18" rx="2" ry="2" stroke="#ffeb3b" stroke-width="2" fill="none"/>
+        <path d="M4 9h16M4 15h16M9 21v-3M15 21v-3" stroke="#ffeb3b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+      <h3>Energie Rinnovabili</h3>
+      <p>Progettazione e installazione di impianti fotovoltaici, con certificazione ufficiale </p>
+    </article>
+  </section>
+
+  <!-- Inserisci questa riga nel <head> della tua pagina -->
+  <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+
+  <section id="social" style="padding: 6px 0 px 0;">
+  </section>
+
+
+
+
+
+
+  <section id="download-cv" tabindex="0" aria-label="Sezione download curriculum">
+    <p>Vuoi conoscere meglio il mio percorso? Scarica il mio CV aggiornato!</p>
+    <a href="Giampiero_CV.pdf" id="download-cv-link" download aria-label="Scarica curriculum vitae">
+      Scarica il CV
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M12 16v-8M8 12l4 4 4-4" stroke="#12213a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <rect x="4" y="16" width="16" height="2" fill="#12213a" />
+      </svg>
+    </a>
+  </section>
+</main>
+<div style="display: flex; gap: 25px; justify-content: center; align-items: center; font-size: 30px;">
+
+<footer>
+  <p>© 2025 Giampiero - Perito Elettrotecnico</p>
+</footer>
+
+<div id="loading-modal" aria-modal="true" role="dialog" aria-label="Preparazione download CV">
+  <div class="modal-content">
+    <button class="close-modal-button" aria-label="Chiudi popup">X</button>
+
+    <svg class="bticino-breaker" id="bticino-breaker" viewBox="0 0 120 180" style="cursor: pointer;">
+      <rect x="10" y="10" width="100" height="160" class="breaker-body" />
+
+      <rect x="15" y="15" width="90" height="150" class="breaker-front-panel" />
+
+      <rect x="35" y="40" width="50" height="30" class="breaker-lever" id="breaker-lever" />
+      <text x="60" y="55" class="breaker-text" id="breaker-text">OFF</text>
+
+      <rect x="25" y="80" width="70" height="20" class="breaker-indicator-window" />
+
+      <path d="M40 100 L40 105 A5 5 0 0 0 45 110 L45 115 M80 100 L80 105 A5 5 0 0 1 75 110 L75 115" class="breaker-icon"/>
+    </svg>
+
+    <div class="breaker-message pulsate">
+      Clicca sull'interruttore generale per avviare il download del CV.
+    </div>
+
+    <div class="electric-meter-display">
+      <div class="meter-line">
+        <span class="meter-label">Tensione Attiva:</span>
+        <span class="meter-value" id="active-voltage">---.-- V</span>
+      </div>
+      <div class="meter-line">
+        <span class="meter-label">Corrente Scarico:</span>
+        <span class="meter-value" id="discharge-current">--.-- A</span>
+      </div>
+      <div class="meter-line">
+        <span class="meter-label">Stato CV:</span>
+        <span class="meter-value" id="cv-status"><span class="status-indicator off"></span>IN ATTESA</span>
+      </div>
+    </div>
+    <div id="terminal-text">
+      <span class="cursor"></span>
+    </div>
+  </div>
+</div>
+
+<script>
+  window.onload = function() {
+  window.scrollTo(0, 0);
+};
+// Loader fade out after content loads
+window.addEventListener('load', () => {
+  const loader = document.getElementById('loader');
+  setTimeout(() => {
+    loader.classList.add('hide');
+    setTimeout(() => {
+      loader.style.display = 'none';
+    }, 800); // Should match CSS transition duration for opacity
+  }, 1500); // Initial delay for loader
+});
+
+// Navbar active link switching on scroll
+const sections = document.querySelectorAll('main section');
+const navLinks = document.querySelectorAll('nav a');
+
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(section => {
+    const headerHeight = document.querySelector('header').offsetHeight;
+    const sectionTop = section.offsetTop - (headerHeight + 20);
+    const sectionHeight = section.offsetHeight;
+    if (pageYOffset >= sectionTop && pageYOffset < sectionTop + sectionHeight) {
+      current = section.getAttribute('id');
+    }
+  });
+
+  navLinks.forEach(link => {
+    link.classList.remove('active');
+    if (link.getAttribute('href') === '#' + current) {
+      link.classList.add('active');
+    }
+  });
+});
+
+function scrollToCenter(event, id) {
+event.preventDefault();
+
+const element = document.getElementById(id);
+if (!element) return;
+
+const elementRect = element.getBoundingClientRect();
+const elementTop = elementRect.top + window.pageYOffset;
+const elementHeight = element.offsetHeight;
+const viewportHeight = window.innerHeight;
+
+let scrollToPosition = elementTop - (viewportHeight / 2) + (elementHeight / 2);
+
+// Limita lo scroll tra 0 e max scroll
+scrollToPosition = Math.max(0, Math.min(scrollToPosition, document.documentElement.scrollHeight - viewportHeight));
+
+window.scrollTo({
+  top: scrollToPosition,
+  behavior: 'smooth'
+});
+}
+
+
+
+// JavaScript per lo slider delle competenze (ora manuale e centrato)
+document.addEventListener('DOMContentLoaded', () => {
+  const sliderContainer = document.querySelector('#skills-slider .slider-container');
+  const sliderCards = Array.from(document.querySelectorAll('#skills-slider .slider-card'));
+  const leftArrow = document.querySelector('#skills-slider .slider-arrow.left');
+  const rightArrow = document.querySelector('#skills-slider .slider-arrow.right');
+
+  if (!sliderContainer || sliderCards.length === 0) return;
+
+  let currentIndex = 0; // Inizialmente mostriamo la prima card
+  let cardWidthWithMargin = 0; // Inizializzato a 0
+
+  // Funzione per aggiornare la larghezza delle card (chiamata al resize e inizialmente)
+  const calculateCardWidth = () => {
+    if (sliderCards.length > 0) {
+      const firstCard = sliderCards[0];
+      const cardStyle = getComputedStyle(firstCard);
+      const marginRight = parseFloat(cardStyle.marginRight);
+      const marginLeft = parseFloat(cardStyle.marginLeft);
+      cardWidthWithMargin = firstCard.offsetWidth + marginLeft + marginRight;
+    }
+  };
+
+  // Funzione per aggiornare la posizione dello slider
+  const updateSliderPosition = () => {
+    if (sliderCards.length === 0 || cardWidthWithMargin === 0) {
+      calculateCardWidth(); // Ricalcola se necessario
+      if (cardWidthWithMargin === 0) return; // Se ancora 0, esci per evitare divisione per zero
+    }
+
+    const containerWidth = sliderContainer.parentElement.offsetWidth; // Larghezza del contenitore #skills-slider
+    const offset = (containerWidth / 2) - (cardWidthWithMargin / 2); // Calcola l'offset per centrare la card
+
+    const targetPosition = (currentIndex * cardWidthWithMargin) - offset;
+    sliderContainer.style.transform = `translateX(${-targetPosition}px)`;
+  };
+
+  // Duplica le card per un loop visivo più fluido
+  const originalCards = Array.from(document.querySelectorAll('#skills-slider .slider-container .slider-card'));
+  // Clona e aggiungi le card originali almeno una volta alla fine per un loop fluido
+  originalCards.forEach(card => {
+      const clone = card.cloneNode(true);
+      sliderContainer.appendChild(clone);
+  });
+  // Se vuoi un loop ancora più esteso, puoi clonarle di nuovo
+  originalCards.forEach(card => {
+      const clone = card.cloneNode(true);
+      sliderContainer.appendChild(clone);
+  });
+
+  // Aggiorna la nodeList delle card dopo la clonazione
+  const allSliderCards = Array.from(document.querySelectorAll('#skills-slider .slider-card'));
+
+
+  // Funzione per spostare lo slider a sinistra
+  const scrollLeft = () => {
+    currentIndex = (currentIndex > 0) ? currentIndex - 1 : allSliderCards.length - 1; // Loop a sinistra
+    updateSliderPosition();
+  };
+
+  // Funzione per spostare lo slider a destra
+  const scrollRight = () => {
+    currentIndex = (currentIndex < allSliderCards.length - 1) ? currentIndex + 1 : 0; // Loop a destra
+    updateSliderPosition();
+  };
+
+
+  // Event Listeners per le frecce
+  leftArrow.addEventListener('click', scrollLeft);
+  rightArrow.addEventListener('click', scrollRight);
+
+  // Aggiorna la posizione iniziale e al resize
+  window.addEventListener('resize', () => {
+    calculateCardWidth(); // Ricalcola la larghezza delle card al resize
+    updateSliderPosition();
+  });
+  calculateCardWidth(); // Calcola la larghezza delle card all'avvio
+  updateSliderPosition(); // Inizializza la posizione dello slider all'inizio
+});
+
+
+// -------------------------------------
+// JAVASCRIPT FOR THE MODAL WITH "X" BUTTON AND BREAKER
+// -------------------------------------
+const downloadCvLink = document.getElementById('download-cv-link');
+const loadingModal = document.getElementById('loading-modal');
+const closeButton = loadingModal.querySelector('.close-modal-button');
+const bticinoBreaker = loadingModal.querySelector('#bticino-breaker');
+const breakerLever = bticinoBreaker ? bticinoBreaker.querySelector('#breaker-lever') : null;
+const breakerText = bticinoBreaker ? bticinoBreaker.querySelector('#breaker-text') : null; // Seleziona l'elemento del testo
+const activeVoltageDisplay = loadingModal.querySelector('#active-voltage');
+const dischargeCurrentDisplay = loadingModal.querySelector('#discharge-current');
+const cvStatusDisplay = loadingModal.querySelector('#cv-status');
+const terminalTextElement = loadingModal.querySelector('#terminal-text');
+const breakerMessage = loadingModal.querySelector('.breaker-message');
+
+let terminalTypingInterval;
+let dischargeCurrentInterval; // Nuovo intervallo per la corrente di scarico
+let currentBreakerState = 'off'; // Inizialmente l'interruttore è spento
+
+// Funzione per mostrare il modale
+function showModal() {
+  loadingModal.classList.add('show-modal');
+  // Resetta lo stato del modale ogni volta che viene mostrato
+  resetModalState();
+}
+
+// Funzione per nascondere il modale
+function hideModal() {
+  loadingModal.classList.remove('show-modal');
+  resetModalState(); // Assicurati che lo stato sia pulito quando il modale è nascosto
+}
+
+// Funzione per resettare lo stato del modale (utilizzata anche per spegnere l'interruttore)
+function resetModalState() {
+  clearInterval(terminalTypingInterval); // Ferma la digitazione se in corso
+  clearInterval(dischargeCurrentInterval); // Ferma l'incremento della corrente
+
+  if (activeVoltageDisplay) activeVoltageDisplay.textContent = '---.-- V';
+  if (dischargeCurrentDisplay) dischargeCurrentDisplay.textContent = '--.-- A';
+  if (cvStatusDisplay) {
+    cvStatusDisplay.innerHTML = '<span class="status-indicator off"></span>IN ATTESA';
+    cvStatusDisplay.querySelector('.status-indicator').classList.remove('on');
+    cvStatusDisplay.querySelector('.status-indicator').classList.add('off');
+  }
+  if (terminalTextElement) {
+    terminalTextElement.innerHTML = '<span class="cursor"></span>';
+  }
+  if (breakerLever) {
+    breakerLever.classList.remove('on'); // Rimuove la classe per il verde (torna rosso)
+    if (breakerText) {
+        breakerText.textContent = 'OFF'; // Testo OFF
+        breakerText.classList.remove('on'); // Rimuovi la classe 'on' anche dal testo
+    }
+    currentBreakerState = 'off'; // Imposta lo stato su spento
+  }
+  if (breakerMessage) {
+      breakerMessage.style.display = 'block'; // Mostra il messaggio quando spento
+      breakerMessage.classList.add('pulsate'); // Aggiungi l'animazione di pulsazione
+  }
+}
+
+// Funzione per simulare la digitazione nel terminale
+function typeIntoTerminal(text, callback) {
+  // Interrompi qualsiasi digitazione precedente
+  clearInterval(terminalTypingInterval);
+  let i = 0;
+  terminalTextElement.innerHTML = ''; // Pulisci prima di digitare
+  terminalTypingInterval = setInterval(() => {
+    // Importante: controlla lo stato dell'interruttore ad ogni passo della digitazione
+    if (currentBreakerState === 'off') {
+      clearInterval(terminalTypingInterval);
+      terminalTextElement.innerHTML = '<span class="cursor"></span>'; // Pulisci il terminale se si spegne
+      return;
+    }
+    if (i < text.length) {
+      terminalTextElement.innerHTML = text.substring(0, i + 1) + '<span class="cursor"></span>';
+      terminalTextElement.scrollTop = terminalTextElement.scrollHeight;
+      i++;
+    } else {
+      clearInterval(terminalTypingInterval);
+      terminalTextElement.innerHTML = text + '<span class="cursor"></span>'; // Assicurati il cursore alla fine
+      if (callback) callback();
+    }
+  }, 50);
+}
+
+// Funzione per avviare/spegnere la sequenza di download tramite l'interruttore
+function toggleBreakerAndDownload() {
+  if (currentBreakerState === 'off') {
+    // ACCENDI L'INTERRUTTORE E AVVIA LA SIMULAZIONE
+    breakerLever.classList.add('on');
+    if (breakerText) {
+        breakerText.textContent = 'ON'; // Testo ON
+        breakerText.classList.add('on'); // Aggiungi la classe 'on' anche al testo
+    }
+    currentBreakerState = 'on'; // Imposta lo stato su "on"
+    if (breakerMessage) {
+        breakerMessage.style.display = 'none'; // Nasconde il messaggio quando acceso
+        breakerMessage.classList.remove('pulsate'); // Rimuovi l'animazione
+    }
+
+    typeIntoTerminal("Avvio della procedura di attivazione del flusso dati...", () => {
+      setTimeout(() => {
+        if (currentBreakerState === 'off') return; // Controlla di nuovo lo stato dopo il timeout
+        const voltage = (Math.random() * (235 - 225) + 225).toFixed(2);
+        activeVoltageDisplay.textContent = `${voltage} V`;
+        typeIntoTerminal(`Verifica tensione di alimentazione... OK (${voltage}V)`, () => {
+          setTimeout(() => {
+            if (currentBreakerState === 'off') return; // Controlla di nuovo lo stato dopo il timeout
+            cvStatusDisplay.innerHTML = '<span class="status-indicator on"></span>ATTIVO';
+            cvStatusDisplay.querySelector('.status-indicator').classList.remove('off');
+            cvStatusDisplay.querySelector('.status-indicator').classList.add('on');
+
+            let current = 0;
+            // Rimuovi il vecchio intervallo se esistente, per sicurezza
+            clearInterval(dischargeCurrentInterval);
+
+            dischargeCurrentInterval = setInterval(() => {
+              if (currentBreakerState === 'off') { // Interrompi se l'interruttore viene spento
+                clearInterval(dischargeCurrentInterval);
+                return;
+              }
+              current += 0.5;
+              if (current > 5.0) {
+                clearInterval(dischargeCurrentInterval);
+                dischargeCurrentDisplay.textContent = `5.00 A`; // Fissa a 5.00 A alla fine
+                typeIntoTerminal(`Flusso dati stabilito. Avvio trasferimento CV.`, () => {
+                    setTimeout(() => {
+                        if (currentBreakerState === 'off') return; // Controlla di nuovo
+                        typeIntoTerminal(`Trasferimento completato. CV scaricato con successo.`, () => {
+                            // Reindirizza al download del file PDF
+                            const link = document.createElement('a');
+                            link.href = 'Giampiero_CV.pdf';
+                            link.download = 'Giampiero_CV.pdf';
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+
+                            // Dopo il download, resetta lo stato dell'interruttore a OFF ma lascia il modale aperto
+                            resetModalState();
+                            // Mostra un messaggio finale nel terminale per l'utente
+                            typeIntoTerminal("Operazione completata. Clicca 'X' per chiudere.", null);
+                        });
+                    }, 500);
+                });
+              } else {
+                dischargeCurrentDisplay.textContent = `${current.toFixed(2)} A`;
+              }
+            }, 100);
+          }, 1000);
+        });
+      }, 1000);
+    });
+  } else {
+    // SPEGNI L'INTERRUTTORE E RESETTA LA SIMULAZIONE (MA NON CHIUDERE IL MODALE)
+    resetModalState(); // Questa funzione ora resetta tutto tranne la chiusura del modale
+    typeIntoTerminal("Operazione interrotta. Interruttore ripristinato.", null);
+  }
+}
+
+// Event Listener per il link "Scarica il CV" per mostrare il modale
+if (downloadCvLink) {
+  downloadCvLink.addEventListener('click', (event) => {
+    event.preventDefault();
+    showModal(); // Mostra il modale, che a sua volta resetta lo stato
+  });
+}
+
+// Event Listener per il pulsante di chiusura "X"
+if (closeButton) {
+  closeButton.addEventListener('click', hideModal);
+}
+
+// Aggiungi la chiusura cliccando fuori dal modale
+if (loadingModal) {
+  loadingModal.addEventListener('click', (event) => {
+    if (event.target === loadingModal) {
+      hideModal();
+    }
+  });
+}
+
+// Event listener per l'interruttore BTicino all'interno del modale
+if (bticinoBreaker) {
+  bticinoBreaker.addEventListener('click', toggleBreakerAndDownload);
+}
+
+</script>
+
+</body>
+</html>
